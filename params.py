@@ -1,0 +1,2 @@
+FPS = 120
+TILE_SIZE = 32

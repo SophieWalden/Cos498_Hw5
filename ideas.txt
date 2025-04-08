@@ -1,0 +1,13 @@
+ANT FARM SIMULATION
+
+A side view of a Terraria-like ant farm simulation.
+A bunch of robots find them selves booted up on a mysterious planet, what do they do but mine?
+What do they do but build?
+Give them a ton of actions and different aptitudes. Kinda like rimworld
+
+Basic rendering and backgrounds created.
+
+TODO:
+ - Want to create a player agent which can walk around and break things
+ - Make water flow a little to even out
+ - Fix map generation
