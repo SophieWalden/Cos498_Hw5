@@ -112,27 +112,37 @@ class Display:
 
                 if chunk_coords in board.chunks:
                     chunk = board.chunks[chunk_coords]
+                
+                    position = self.get_world_coordinates(chunk_x, chunk_y, TILE_SIZE * 16)
+                    
+                    if not chunk.rendered or chunk.render_update:
+                        chunk.render_update = False
+                        chunk.rendered = self.render_chunk(chunk, board)
 
-                    for background_tile in chunk.background_tiles:
-                        x, y = self.get_world_coordinates(background_tile.pos[0], background_tile.pos[1], TILE_SIZE)
-                        background_tile.displayPos = (x, y)
-                        
-                        if background_tile.terrain in BACKGROUND_TILE_IMAGES:
-                            self.blit(self.images[BACKGROUND_TILE_IMAGES[background_tile.terrain]], x, y, (TILE_SIZE, TILE_SIZE), f"{background_tile.terrain}_background")
+                    self.blit(chunk.rendered, position[0], position[1], (TILE_SIZE * 16, TILE_SIZE * 16))
 
-                    for tile in chunk.tiles:
-                        x, y = self.get_world_coordinates(tile.pos[0], tile.pos[1], TILE_SIZE)
-                        tile.displayPos = (x, y)
-                        
-                        if tile.terrain != cell_terrain.Terrain.Open:
-                            self.blit(self.images[TILE_IMAGES[tile.terrain]], x, y, (TILE_SIZE, TILE_SIZE), str(tile.terrain))
-                        elif tile.pos[1] != 0 and board.tiles[tile.pos[1] - 1][tile.pos[0]].terrain != cell_terrain.Terrain.Open:
-                            surface = pygame.Surface((TILE_SIZE, TILE_SIZE // 4), pygame.SRCALPHA)
-                            surface.fill((0,0,0, 100))
+    def render_chunk(self, chunk, board):
+        rendered_chunk = pygame.Surface((TILE_SIZE * 16, TILE_SIZE * 16))
+        
 
-                            self.blit(surface, x, y, (TILE_SIZE, TILE_SIZE // 4), "top_block_shading")
-          
+        for background_tile in chunk.background_tiles:
+            
+            if background_tile.terrain in BACKGROUND_TILE_IMAGES:
+                in_chunk_position = (background_tile.pos[0] % 16, background_tile.pos[1] % 16)
+                rendered_chunk.blit(self.images[BACKGROUND_TILE_IMAGES[background_tile.terrain]], (TILE_SIZE * in_chunk_position[0], TILE_SIZE * in_chunk_position[1]))
 
+        for tile in chunk.tiles:
+            if tile.terrain in TILE_IMAGES:
+                in_chunk_position = (tile.pos[0] % 16, tile.pos[1] % 16)
+                rendered_chunk.blit(self.images[TILE_IMAGES[tile.terrain]], (TILE_SIZE * in_chunk_position[0], TILE_SIZE * in_chunk_position[1]))
+ 
+            elif tile.pos[1] != 0 and board.tiles[tile.pos[1] - 1][tile.pos[0]].terrain != cell_terrain.Terrain.Open:
+                surface = pygame.Surface((TILE_SIZE, TILE_SIZE // 4), pygame.SRCALPHA)
+                surface.fill((0,0,0, 100))
+
+                rendered_chunk.blit(surface, (TILE_SIZE * in_chunk_position[0], TILE_SIZE * (in_chunk_position[1] + 1)))
+
+        return rendered_chunk
                 
                 
 

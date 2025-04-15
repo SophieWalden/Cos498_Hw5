@@ -4,17 +4,31 @@ from cell import Cell
 
 class GameMap:
     def __init__(self):
-        self.width, self.height = 500, 120
+        self.width, self.height = 1000, 120
         self.tiles, self.background_tiles, self.chunks = self.generate_board(self.width, self.height)
 
     def is_open(self, x, y):
-        return x > 0 and x < len(self.tiles[0]) and y > 0 and y < len(self.tiles) and self.tiles[y][x].terrain in [cell_terrain.Terrain.Open, cell_terrain.Terrain.Water]
+        return x > 0 and x < len(self.tiles[0]) and y > 0 and y < len(self.tiles) and self.tiles[y][x].terrain in [cell_terrain.Terrain.Open]
 
     def is_breakable(self, x, y):
-        return x > 0 and x < len(self.tiles[0]) and y > 0 and y < len(self.tiles) and self.tiles[y][x].terrain not in [cell_terrain.Terrain.Open, cell_terrain.Terrain.Water]
+        return x > 0 and x < len(self.tiles[0]) and y > 0 and y < len(self.tiles) and self.tiles[y][x].terrain not in [cell_terrain.Terrain.Open]
+    
+    def in_bounds(self, x, y):
+        return x > 0 and x < len(self.tiles[0]) and y > 0 and y < len(self.tiles) 
+    
+    def place(self, x, y, block):
+        self.tiles[y][x].terrain = block
+        self.tiles[y][x].chunk.render_update = True
+
+        return True
 
     def break_block(self, x, y):
+        block_to_break = self.tiles[y][x].terrain
+
         self.tiles[y][x].terrain = cell_terrain.Terrain.Open
+        self.tiles[y][x].chunk.render_update = True
+
+        return block_to_break
 
     def generate_board(self, width, height):
         board = [[0] * width for _ in range(height)]
@@ -26,7 +40,7 @@ class GameMap:
         for i in range(len(board[0])):
             if not previous_column:
                 grass_level = random.randint(20, 30)
-                stone_level = grass_level + 10
+                stone_level = grass_level + 40
 
                 previous_column = [grass_level, stone_level]
             else:
@@ -34,7 +48,7 @@ class GameMap:
 
                 grass_level += random.randint(-1, 1)
 
-                stone_level = grass_level + 10
+                stone_level = grass_level + 40
 
 
                 previous_column = [grass_level, stone_level]
@@ -63,13 +77,17 @@ class GameMap:
 
         return board, background_board, chunks
     
+
 class Chunk:
     def __init__(self, size=16):
         self.tiles, self.size = [], size
         self.background_tiles = []
+        self.rendered = None
+        self.render_update = False
 
     def add_tile(self, cell):
         self.tiles.append(cell)
+        cell.chunk = self
     
     def add_background_tile(self, cell):
         self.background_tiles.append(cell)

@@ -11,3 +11,4 @@ TODO:
  - Want to create a player agent which can walk around and break things
  - Make water flow a little to even out
  - Fix map generation
+ - Render a chunk as a surface and only update that chunk render when block updates happen

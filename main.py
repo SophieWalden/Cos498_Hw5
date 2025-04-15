@@ -17,7 +17,7 @@ class Game:
 
         self.board = game_map.GameMap()
         self.reset = False
-        self.agents = [Agent(self.display, self.display.images["agent_sprite"], (random.randint(10, int(self.board.width * 0.9)), 5)) for _ in range(100)]
+        self.agents = [Agent(self.display, self.display.images["agent_sprite"], (random.randint(30, int(self.board.width * 0.7)), self.board.height // 2)) for _ in range(130)]
         self.speed = 1
 
     def event_handling(self):
