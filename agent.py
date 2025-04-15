@@ -2,6 +2,7 @@ import pygame
 import params
 import cell_terrain
 import random
+import structure
 
 from collections import defaultdict
 
@@ -20,7 +21,7 @@ class Agent:
 
         self.vy, self.vx = 0, 0
 
-        self.action_queue = []
+        self.structure = None
         self.pathing_mode = None
     
     def tick(self, game_map, dt):
@@ -31,14 +32,20 @@ class Agent:
 
         while self.ticks >= self.ticks_between_updates:
 
-            # Choose move
-            if random.random() < 0.5:
+            if self.structure and self.structure.actions:
+                action, pos = self.structure.actions.pop(0)
+                if action == "move":
+                    self.move(pos[0], pos[1], game_map) 
+                elif action == "break":
+                    self.dig_block(0, 0, game_map)
+                elif action == "place":
+                    block = random.choice(list(self.inventory.keys()))
+                    self.place_block(0, 0, block, game_map)
+            
+            elif random.random() < 0.5:
                 move = random.choice([(-1, 0), (1, 0), (0, 1), (0, -1)])
-                
-             
-                self.vx = -move[0]
-                self.vy = -move[1]
-    
+            
+                self.move(-move[0], -move[1], game_map)
             elif random.random() < 0.3:
                 move = random.choice([(-1, 0), (1, 0), (0, -1) if random.random() < 0.5 else (0, 0), (0, 1)])
 
@@ -47,6 +54,11 @@ class Agent:
 
                     if block: 
                         self.inventory[block] += 1
+
+            elif random.random() < 0.02:
+                self.structure = structure.Structure("spiral")
+                if not sum(self.inventory.values()) > self.structure.cost["blocks"]:
+                    self.structure = None
             elif self.inventory:
                 block = random.choice(list(self.inventory.keys()))
                 move = random.choice([(-1, 0), (1, 0), (0, 1)])

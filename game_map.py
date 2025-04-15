@@ -4,7 +4,7 @@ from cell import Cell
 
 class GameMap:
     def __init__(self):
-        self.width, self.height = 1000, 120
+        self.width, self.height = 100, 80
         self.tiles, self.background_tiles, self.chunks = self.generate_board(self.width, self.height)
 
     def is_open(self, x, y):
