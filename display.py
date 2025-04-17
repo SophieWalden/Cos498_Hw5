@@ -45,6 +45,7 @@ class Display:
 
         # Caches
         self.image_cache = LRUCache()
+        self.painted_block_cache = {}
         self.text_cache = {}
 
         self.mouse_held_down_since = 0
@@ -98,7 +99,23 @@ class Display:
             x, y = self.get_world_coordinates(x, y)
             y -= 30 * self.zoom
 
-            self.blit(agent.image, x, y, (30, 60), "agent")
+            for i, location in enumerate(agent.past_locations[::-1]):
+                particleSize = int(40 * (0.9 ** i))
+                if particleSize <= 0: continue
+
+                effectSurface = pygame.Surface((particleSize, particleSize))
+                color = params.AGENT_COLORS[agent.name]
+                effectSurface.fill(params.AGENT_COLORS[agent.name])
+
+                x2, y2 = self.get_world_coordinates(location[0], location[1])
+                x2 += 10 * self.zoom
+                y2 -= 20 * self.zoom
+      
+                self.blit(effectSurface, x2, y2, (particleSize, particleSize), f"particle_{particleSize}_{color[0]}_{color[1]}_{color[2]}")
+
+            self.blit(agent.image, x, y, (60, 60), f"agent_{agent.name}")
+
+            
 
     def draw_map(self, board):
         top_left_chunk = (self.camera_pos[0] // (TILE_SIZE * 16), self.camera_pos[1] // (TILE_SIZE * 16))
@@ -134,7 +151,18 @@ class Display:
         for tile in chunk.tiles:
             if tile.terrain in TILE_IMAGES:
                 in_chunk_position = (tile.pos[0] % 16, tile.pos[1] % 16)
-                rendered_chunk.blit(self.images[TILE_IMAGES[tile.terrain]], (TILE_SIZE * in_chunk_position[0], TILE_SIZE * in_chunk_position[1]))
+
+                image = self.images[TILE_IMAGES[tile.terrain]]
+                if tile.color != None:
+                    name = f"{tile.terrain}_{tile.color}"
+
+                    if name not in self.painted_block_cache:
+                        image = image.copy()
+                        image.fill(tile.color, special_flags=pygame.BLEND_RGBA_MULT)
+                        self.painted_block_cache[name] = image
+                    image = self.painted_block_cache[name]
+
+                rendered_chunk.blit(image, (TILE_SIZE * in_chunk_position[0], TILE_SIZE * in_chunk_position[1]))
  
             elif tile.pos[1] != 0 and board.tiles[tile.pos[1] - 1][tile.pos[0]].terrain != cell_terrain.Terrain.Open:
                 surface = pygame.Surface((TILE_SIZE, TILE_SIZE // 4), pygame.SRCALPHA)

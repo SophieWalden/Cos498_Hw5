@@ -1,24 +1,25 @@
 import cell_terrain
 import random
 from cell import Cell
-
+import params
 class GameMap:
     def __init__(self):
-        self.width, self.height = 100, 80
+        self.width, self.height = params.BOARD_WIDTH, params.BOARD_HEIGHT
         self.tiles, self.background_tiles, self.chunks = self.generate_board(self.width, self.height)
 
     def is_open(self, x, y):
-        return x > 0 and x < len(self.tiles[0]) and y > 0 and y < len(self.tiles) and self.tiles[y][x].terrain in [cell_terrain.Terrain.Open]
+        return x >= 0 and x < len(self.tiles[0]) and y >= 0 and y < len(self.tiles) and self.tiles[y][x].terrain in [cell_terrain.Terrain.Open]
 
     def is_breakable(self, x, y):
-        return x > 0 and x < len(self.tiles[0]) and y > 0 and y < len(self.tiles) and self.tiles[y][x].terrain not in [cell_terrain.Terrain.Open]
+        return x >= 0 and x < len(self.tiles[0]) and y >= 0 and y < len(self.tiles) and self.tiles[y][x].terrain not in [cell_terrain.Terrain.Open]
     
     def in_bounds(self, x, y):
-        return x > 0 and x < len(self.tiles[0]) and y > 0 and y < len(self.tiles) 
+        return x >= 0 and x < len(self.tiles[0]) and y >= 0 and y < len(self.tiles) 
     
-    def place(self, x, y, block):
+    def place(self, x, y, block, color=None):
         self.tiles[y][x].terrain = block
         self.tiles[y][x].chunk.render_update = True
+        self.tiles[y][x].color = color
 
         return True
 

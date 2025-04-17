@@ -3,3 +3,4 @@ class Cell:
         self.terrain, self.pos = terrain, pos
         self.displayPos = self.pos[:]
         self.chunk = None
+        self.color = None

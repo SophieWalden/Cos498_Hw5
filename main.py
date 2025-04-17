@@ -6,7 +6,7 @@ from pygame.locals import *
 import game_map
 import display
 import cell_terrain
-from agent import Agent
+from agent import Agent, CopierAgent
 import random 
 pygame.init()
 
@@ -17,7 +17,15 @@ class Game:
 
         self.board = game_map.GameMap()
         self.reset = False
-        self.agents = [Agent(self.display, self.display.images["agent_sprite"], (random.randint(10, int(self.board.width * 0.7)), self.board.height // 2)) for _ in range(10)]
+        self.agents = []
+
+        
+        agent_classes = {"normal": Agent, "copier": CopierAgent}
+        for agent, count in params.AGENT_COUNTS.items():
+            for _ in range(count):
+                created_agent = agent_classes[agent](self.display, self.display.images[params.AGENT_IMAGES[agent]], (random.randint(10, int(self.board.width * 0.7)), self.board.height // 2))
+                self.agents.append(created_agent)
+
         self.speed = 1
 
     def event_handling(self):
