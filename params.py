@@ -4,7 +4,7 @@ TILE_SIZE = 32
 BOARD_WIDTH = 500
 BOARD_HEIGHT = 200
 
-AGENT_COUNTS = {"normal": 10, "copier": 2, "gravity": 10, "siphon": 2, "painter": 5}
+AGENT_COUNTS = {"normal": 10, "copier": 2, "gravity": 15, "siphon": 2, "painter": 5}
 
 # Certain agents can paint blocks
 BLOCK_COLORS = [    

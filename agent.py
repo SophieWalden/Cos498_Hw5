@@ -310,9 +310,9 @@ class SiphonAgent(Agent):
         if sum(self.inventory.values()) < 300:
             for agent in agents:
                 if agent == self: continue
+                if type(agent) == SiphonAgent or type(agent) == GravityAgent: continue
                 if self.dist(self.pos, agent.pos) > 50: continue
                 if sum(agent.inventory.values()) < 100: continue
-                if type(agent) == SiphonAgent: continue
                 if agent in self.siphoning_agents: continue
 
                 for key, val in agent.inventory.items():

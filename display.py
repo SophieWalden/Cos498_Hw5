@@ -270,8 +270,8 @@ class Display:
             if abs(self.camera_pos[0] - self.tracking_wanted_pos[0]) + abs(self.camera_pos[1] - self.tracking_wanted_pos[1]) > 0.1:
                 dx, dy = self.camera_pos[0] - self.tracking_wanted_pos[0], self.camera_pos[1] - self.tracking_wanted_pos[1]
 
-                self.camera_pos[0] -= dx * 0.03
-                self.camera_pos[1] -= dy * 0.03
+                self.camera_pos[0] -= dx * 0.05
+                self.camera_pos[1] -= dy * 0.05
 
         self.camera_pos[0] = min(max(self.camera_pos[0], 0), board.width * TILE_SIZE - self.width * 1/self.zoom)
         self.camera_pos[1] = min(max(self.camera_pos[1], 0), board.height * TILE_SIZE - self.height * 1/self.zoom)
