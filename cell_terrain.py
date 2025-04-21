@@ -5,3 +5,5 @@ class Terrain(enum.Enum):
     Grass = 1
     Dirt = 2
     Stone = 3
+    Obsidian = 4
+    Iron = 5

@@ -12,3 +12,10 @@ TODO:
  - Make water flow a little to even out
  - Fix map generation
  - Render a chunk as a surface and only update that chunk render when block updates happen
+
+
+ Aptitudes:
+  - Clutter Removal: Break the most isolated block in radius
+  - Path finder
+  - Edge seeker
+  - Chaos: Random

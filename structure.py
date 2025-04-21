@@ -2,66 +2,108 @@
 import copy
 
 STRUCTURE_COSTS = {
-    "spiral": {"blocks": 10},
-    "cross": {"blocks": 5},
-    "frame": {"blocks": 8},
-    "dot": {"blocks": 1},
-    "stairs": {"blocks": 6},
-    "plus": {"blocks": 5},
-    "corner": {"blocks": 3},
-    "arrow": {"blocks": 6},
-    "zigzag": {"blocks": 7},
-    "diamond": {"blocks": 5}
+    "pillar": {"blocks": 12},
+    "archway": {"blocks": 9},
+    "column_frame": {"blocks": 12},
+    "circle_base": {"blocks": 12},
+    "spire": {"blocks": 12},
+    "frame_with_pillars": {"blocks": 15},
+    "diamond_pillar": {"blocks": 12},
+    "temple_entrance": {"blocks": 12},
+    "hexagonal_frame": {"blocks": 13},
+    "inverted_pyramid": {"blocks": 12},
+    "spiral": {"blocks": 10}
 }
 
 STRUCTURE_BLOCKS = {
-    "spiral": [
-        ["air", "air", "air", "air", "air"],
-        ["air", "block", "block", "block", "air"],
-        ["air", "air", "air", "block", "air"],
-        ["air", "block", "block", "block", "air"],
-        ["air", "air", "air", "air", "air"]
+    'pillar': [
+        ['air', 'air', 'air', 'air', 'air', 'air', 'air'],
+        ['air', 'air', 'block', 'air', 'air', 'air', 'air'],
+        ['air', 'block', 'block', 'block', 'block', 'air', 'air'],
+        ['air', 'air', 'block', 'air', 'air', 'air', 'air'],
+        ['air', 'air', 'air', 'air', 'air', 'air', 'air']
     ],
-    "cross": [
-        ["air", "block", "air"],
-        ["block", "block", "block"],
-        ["air", "block", "air"]
+    
+    'archway': [
+        ['air', 'air', 'block', 'air', 'air'],
+        ['air', 'block', 'air', 'block', 'air'],
+        ['block', 'air', 'block', 'air', 'block'],
+        ['air', 'block', 'air', 'block', 'air'],
+        ['air', 'air', 'block', 'air', 'air']
     ],
-    "frame": [
-        ["block", "block", "block"],
-        ["block", "air", "block"],
-        ["block", "block", "block"]
+    
+    'column_frame': [
+        ['air', 'air', 'block', 'air', 'air'],
+        ['air', 'block', 'block', 'block', 'air'],
+        ['block', 'block', 'block', 'block', 'block'],
+        ['air', 'block', 'block', 'block', 'air'],
+        ['air', 'air', 'block', 'air', 'air']
     ],
-    "dot": [
-        ["block"]
+    
+    'circle_base': [
+        ['air', 'air', 'block', 'air', 'air'],
+        ['air', 'block', 'block', 'block', 'air'],
+        ['block', 'block', 'block', 'block', 'block'],
+        ['air', 'block', 'block', 'block', 'air'],
+        ['air', 'air', 'block', 'air', 'air']
     ],
-    "stairs": [
-        ["block", "air", "air"],
-        ["air", "block", "air"],
-        ["air", "air", "block"]
+    
+    'spire': [
+        ['air', 'air', 'block', 'air', 'air'],
+        ['air', 'block', 'block', 'block', 'air'],
+        ['air', 'block', 'block', 'block', 'air'],
+        ['air', 'block', 'block', 'block', 'air'],
+        ['block', 'block', 'block', 'block', 'block']
     ],
-    "plus": [
-        ["air", "block", "air"],
-        ["block", "block", "block"],
-        ["air", "block", "air"]
+    
+    'frame_with_pillars': [
+        ['air', 'air', 'block', 'air', 'air', 'block', 'air'],
+        ['air', 'block', 'block', 'block', 'block', 'block', 'air'],
+        ['block', 'block', 'block', 'block', 'block', 'block', 'block'],
+        ['air', 'block', 'block', 'block', 'block', 'block', 'air'],
+        ['air', 'air', 'block', 'air', 'air', 'block', 'air']
     ],
-    "corner": [
-        ["block", "block"],
-        ["block", "air"]
+    
+    'diamond_pillar': [
+        ['air', 'air', 'block', 'air', 'air'],
+        ['air', 'block', 'block', 'block', 'air'],
+        ['block', 'block', 'block', 'block', 'block'],
+        ['air', 'block', 'block', 'block', 'air'],
+        ['air', 'air', 'block', 'air', 'air']
     ],
-    "arrow": [
-        ["air", "block", "air"],
-        ["block", "block", "block"],
-        ["air", "block", "air"]
+    
+    'temple_entrance': [
+        ['air', 'air', 'block', 'air', 'air'],
+        ['air', 'block', 'block', 'block', 'air'],
+        ['block', 'block', 'block', 'block', 'block'],
+        ['air', 'block', 'block', 'block', 'air'],
+        ['air', 'air', 'block', 'air', 'air']
     ],
-    "zigzag": [
-        ["block", "air", "block", "air"],
-        ["air", "block", "air", "block"]
+    
+    'hexagonal_frame': [
+        ['air', 'air', 'block', 'air', 'air', 'block'],
+        ['air', 'block', 'block', 'block', 'block', 'air'],
+        ['block', 'block', 'block', 'block', 'block', 'block'],
+        ['air', 'block', 'block', 'block', 'block', 'air'],
+        ['air', 'air', 'block', 'air', 'air', 'block']
     ],
-    "diamond": [
-        ["air", "block", "air"],
-        ["block", "air", "block"],
-        ["air", "block", "air"]
+    
+    'inverted_pyramid': [
+        ['air', 'air', 'air', 'air', 'air'],
+        ['air', 'block', 'block', 'block', 'air'],
+        ['air', 'block', 'block', 'block', 'air'],
+        ['block', 'block', 'block', 'block', 'block'],
+        ['air', 'air', 'air', 'air', 'air']
+    ],
+
+    'spiral': [
+        ['air', 'air', 'air', 'air', 'air', 'air', 'air'],
+        ['air', 'air', 'air', 'air', 'air', 'air', 'air'],
+        ['air', 'air', 'block', 'block', 'block', 'air', 'air'],
+        ['air', 'air', 'air', 'air', 'block', 'air', 'air'],
+        ['air', 'air', 'block', 'block', 'block', 'air', 'air'],
+        ['air', 'air', 'air', 'air', 'air', 'air', 'air'],
+        ['air', 'air', 'air', 'air', 'air', 'air', 'air']
     ]
 }
 

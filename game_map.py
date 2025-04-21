@@ -16,6 +16,9 @@ class GameMap:
     def in_bounds(self, x, y):
         return x >= 0 and x < len(self.tiles[0]) and y >= 0 and y < len(self.tiles) 
     
+    def is_not_painted(self, x, y):
+        return self.is_breakable(x, y) and self.tiles[y][x].color == None
+    
     def place(self, x, y, block, color=None):
         self.tiles[y][x].terrain = block
         self.tiles[y][x].chunk.render_update = True
@@ -65,6 +68,16 @@ class GameMap:
                 
                 if j > stone_level:
                     terrain = cell_terrain.Terrain.Stone
+
+                    depth = j / height
+                    chance = max(0, (depth - 0.5)) ** 4 * 1.6
+                    if random.random() < chance:
+                        terrain = cell_terrain.Terrain.Obsidian
+
+                    depth = 1 - (j / height)
+                    chance = depth* 0.03
+                    if random.random() < chance:
+                        terrain = cell_terrain.Terrain.Iron
 
                 board[j][i] = Cell(terrain, (i, j))
                 background_board[j][i] = Cell(terrain, (i, j))
